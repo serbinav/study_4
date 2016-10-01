@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-import os, sys, codecs, random, configparser, datetime, study_4, copy
-#import scrapy
-import itertools
+
+import sys
+import copy
+import study_4
 
 """
     Задание по 4 лекции в прикрепленном документе.
@@ -18,12 +19,6 @@ import itertools
 
 # ----------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
-    #i= 0
-    #while i!=5:
-    #    newProduct = study_4.Product("cghgfjhfg")
-    #    print(newProduct)
-    #    i=i+1
-
 
     if len(sys.argv) == 1:
         print("ошибка: не заданы входные параметры")
@@ -62,7 +57,6 @@ if __name__ == "__main__":
 
                         #print(numberPrоduct)
                         if numberPrоduct.isdigit():
-                            # __new__ питон почитать
                             # есть проблема когда один  продукт но 2 разных рецепта
                             newRecipe.checkDublicateProduct(newProduct,numberPrоduct)
                             print(newRecipe.listProduct.items())
@@ -98,8 +92,9 @@ if __name__ == "__main__":
                         print("неизвестный аргумент")
 
         elif yesNo == 'н':
-            delFin = input("удалить рецепт из заказа или завершить работу с этим заказом? (у/з) ")
+            delFin = None
             while delFin != 'з':
+                delFin = input("удалить рецепт из заказа или завершить работу с этим заказом? (у/з) ")
                 if delFin == 'у':
                     titleRecipe = newTask.printRecipe()
                     newTask.deleteRecipe(titleRecipe, newStorage)

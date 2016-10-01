@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-import os, sys, codecs, random, configparser, datetime
-#import scrapy
-import itertools
+
+import sys
+import configparser
+import datetime
+import random
 
 """
     Задание по 4 лекции в прикрепленном документе.
@@ -33,17 +35,22 @@ class Product(object): #Продукт 
         return (self.name, self.measure, self.articleNumber) == (other.name, other.measure, other.articleNumber)
 
     def __ne__(self, other):
-        # Not strictly necessary, but to avoid having both x==y and x!=y
-        # True at the same time
-        return not (self == other)
+        #return not (self == other)
+        if not (self.name == other.name):
+            return True
+        elif not (self.measure == other.measure):
+            return True
+        elif not (self.articleNumber  == other.articleNumber):
+            return True
+        return False
 
 
 
 class Storage(object): #Склад продуктов 
-    listAvailableProduct = dict() #список доступных продуктов и их количество 
+    listAvailableProduct = None #список доступных продуктов и их количество 
 
     def __init__(self):
-        pass
+        self.listAvailableProduct = dict()
 
     def generateCode(self):
         newSausage = Product("колбаса")
@@ -79,7 +86,7 @@ class Storage(object): #Склад продуктов 
 
 class Recipe(object): #Рецепт 
     title = None #оригинальное название
-    listProduct = dict() #список продуктов и необходимое количество продуктов для приготовления пиццы 
+    listProduct = None #список продуктов и необходимое количество продуктов для приготовления пиццы 
 
     """
         При добавлении рецепта выполняется проверка склада на наличие продуктов. 
@@ -87,8 +94,10 @@ class Recipe(object): #Рецепт 
         невозможности добавить рецепт (не хватает товаров на складе),  пользователю 
         выводится сообщение с предложением создать рецепт заново.
     """
+
     def __init__(self):
         self.title = random.randint(1, sys.maxsize)
+        self.listProduct = dict()
 
     def addProduct (self,nameProduct,numberProduct): #добавлять продукты, указывая их количество
         pass
@@ -127,7 +136,7 @@ class Recipe(object): #Рецепт 
 
 
 class Task(object): #Заказ
-    listRecipe = [] #список рецептов заказанных пицц 
+    listRecipe = None #список рецептов заказанных пицц 
     fullName= None #фио заказчика 
     date = None #дата заказа
     number = None #номер заказа
@@ -139,12 +148,14 @@ class Task(object): #Заказ
         При отмене заказа либо при удалении рецепта из заказа все 
         зарезервированные продукты возвращаются на склад
     """
+
     def __init__(self,fullName): #создать заказ
         self.fullName = fullName
         #sys.stdout.write("serb")  # !!! DELETE
         self.date = datetime.datetime.now()
         number = iter(i for i in range(1, sys.maxsize))
         self.number = next(number)
+        self.listRecipe = []
 
     def cancel(self): #удалить (отменить) заказ
         pass
