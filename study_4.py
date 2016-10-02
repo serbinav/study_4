@@ -80,20 +80,13 @@ class Storage(object): #Склад продуктов 
 
     def printProduct(self):
         for element in self.listAvailableProduct:
-            print(element.name)
+            print(element.name + " " + str(self.listAvailableProduct[element]))
 
 
 
 class Recipe(object): #Рецепт 
     title = None #оригинальное название
     listProduct = None #список продуктов и необходимое количество продуктов для приготовления пиццы 
-
-    """
-        При добавлении рецепта выполняется проверка склада на наличие продуктов. 
-        При этом они резервируются (их количество на складе уменьшается). При 
-        невозможности добавить рецепт (не хватает товаров на складе),  пользователю 
-        выводится сообщение с предложением создать рецепт заново.
-    """
 
     def __init__(self):
         self.title = random.randint(1, sys.maxsize)
@@ -105,8 +98,6 @@ class Recipe(object): #Рецепт 
     def checkStorage(self,newStorage):
         if len(self.listProduct) > 0:
             for prod in self.listProduct:
-                print(prod.name)
-                print(self.listProduct[prod])
                 if int(self.listProduct[prod]) > int(newStorage.listAvailableProduct[prod]):
                     return 2  # bad
         else:
@@ -115,11 +106,6 @@ class Recipe(object): #Рецепт 
 
     def checkDublicateProduct(self,newProduct,numberPrоduct):
         numberPrоduct = int(numberPrоduct)
-        print("newProduct =")
-        print(newProduct)
-        print("numberPrоduct =")
-        print(numberPrоduct)
-        print(len(self.listProduct))
         if newProduct in self.listProduct.keys():
             summNumberPrоduct = int(self.listProduct[newProduct]) + numberPrоduct
             self.listProduct[newProduct] = summNumberPrоduct
@@ -127,8 +113,9 @@ class Recipe(object): #Рецепт 
             self.listProduct[newProduct] = numberPrоduct
 
     def printProduct(self):
+        print("название рецепта " + str(self.title))
         for element in self.listProduct:
-            print(element.name)
+            print(element.name + " " + str(self.listProduct[element]))
 
     def printError(self):
         pass
@@ -141,17 +128,8 @@ class Task(object): #Заказ
     date = None #дата заказа
     number = None #номер заказа
 
-    """
-        При завершении  работы с текущим заказом можно создать новый и повторить 
-        операции по добавлению рецептов. 
-
-        При отмене заказа либо при удалении рецепта из заказа все 
-        зарезервированные продукты возвращаются на склад
-    """
-
     def __init__(self,fullName): #создать заказ
         self.fullName = fullName
-        #sys.stdout.write("serb")  # !!! DELETE
         self.date = datetime.datetime.now()
         number = iter(i for i in range(1, sys.maxsize))
         self.number = next(number)
@@ -161,30 +139,30 @@ class Task(object): #Заказ
         pass
     def change(self): #изменить заказ
         pass
-    def seeTask(self): #просмотреть существующие заказы с детализацией рецептов
-        print(self.listRecipe)
     def addRecipe(self): #сформировать рецепты пицц
+        pass
+    def seeTask(self): #просмотреть существующие заказы с детализацией рецептов
         pass
 
     def printRecipe(self):
+        print("фио заказчика " + self.fullName)
+        print("дата заказа " + str(self.date))
+        print("номер заказа " + str(self.number))
         for element in self.listRecipe:
-            print(element.title)
             element.printProduct()
-            return element.title
 
-    def deleteRecipe(self,titleRecipe,newStorage):
+    def checkRecipe(self,titleRecipe):
         for rec in self.listRecipe:
-            if titleRecipe == rec.title:
-                for prod in rec.listProduct:
-                    returnNumberPrоduct = int(newStorage.listAvailableProduct[prod]) + int(rec.listProduct[prod])
-                    newStorage.listAvailableProduct[prod] = returnNumberPrоduct
-                    rec.listProduct[prod] = 0
-                return 0  # good
+            if titleRecipe == str(rec.title):
+                return rec # good
         return 1  # bad
+
+    def deleteRecipe(self,Recipe,newStorage):
+        for prod in Recipe.listProduct:
+            returnNumberPrоduct = int(newStorage.listAvailableProduct[prod]) + int(Recipe.listProduct[prod])
+            newStorage.listAvailableProduct[prod] = returnNumberPrоduct
+            Recipe.listProduct[prod] = 0
 
     def deleteTask(self, newStorage):
         for rec in self.listRecipe:
-            self.deleteRecipe(rec.title, newStorage)
-
-    #def returnProduct(self):
-    #    pass
+            self.deleteRecipe(rec, newStorage)

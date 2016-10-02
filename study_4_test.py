@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import unittest, study_4
+import unittest
+import study_4
 
 """
     Задание по 4 лекции в прикрепленном документе.
@@ -23,10 +24,27 @@ class Test(unittest.TestCase):
         newTask.create()
         newTask.addRecipe()
 
-        #self.assertEqual(study_4.MyParsingClass.deleteDuplicate(self,test),{1,2,3,4,5,6,7,8,10,9})
+    def testProduct(self):
+        # pass
+        p1 = study_4.Product('name1')
+        p2 = study_4.Product('name2')
+        p12 = study_4.Product('name1')
+        assert p1 != p2
+        assert p2 != p12
+        assert p1 == p12
+        assert hash(p1) == hash(p12)
+        assert hash(p1) != hash(p2)
+        assert hash(p2) != hash(p12)
+        d = {p1: 10, p2: 5}
+        d[p12] += 5
+        d[p2] -= 5
+        print(d)
 
 # ----------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     unittest.main()
 
 # ----------------------------------------------------------------------------------------------------
+
+
+
